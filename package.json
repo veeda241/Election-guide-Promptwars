@@ -1,0 +1,22 @@
+{
+  "name": "election-guide-client",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "concurrently -k -n backend,frontend -c cyan,magenta \".venv\\Scripts\\python.exe -m backend.main\" \"vite\"",
+    "dev": "concurrently -k -n backend,frontend -c cyan,magenta \".venv\\Scripts\\python.exe -m backend.main\" \"vite\"",
+    "backend": ".venv\\Scripts\\python.exe -m backend.main",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.2.1",
+    "vite": "^5.4.11"
+  }
+}

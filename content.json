@@ -1,0 +1,349 @@
+{
+  "brand": {
+    "name": "Election Guide",
+    "tagline": "Interactive civic education assistant",
+    "summary": "Understand the election process with timelines, step-by-step guides, quizzes, and calendar planning.",
+    "eyebrow": "Civic learning, made practical"
+  },
+  "features": [
+    {
+      "title": "Timeline View",
+      "desc": "Follow the major phases of an election from filing to certification."
+    },
+    {
+      "title": "How It Works",
+      "desc": "Walk through the core steps that shape the democratic process."
+    },
+    {
+      "title": "Quiz Yourself",
+      "desc": "Check your knowledge with a short civic literacy quiz."
+    },
+    {
+      "title": "Calendar Planning",
+      "desc": "Track important dates and add them to your calendar."
+    },
+    {
+      "title": "AI Assistant",
+      "desc": "Get concise explanations for election topics on demand."
+    },
+    {
+      "title": "Accessible by Default",
+      "desc": "Built with keyboard-friendly controls and readable contrast."
+    }
+  ],
+  "timelines": {
+    "general": [
+      {
+        "title": "Candidate filing deadline",
+        "date": "Aug 15, 2024",
+        "status": "done",
+        "desc": "Candidates submit the paperwork needed to appear on the ballot."
+      },
+      {
+        "title": "Voter registration opens",
+        "date": "Sep 1, 2024",
+        "status": "done",
+        "desc": "Eligible voters can register or update their information before the general election."
+      },
+      {
+        "title": "Early voting begins",
+        "date": "Oct 20, 2024",
+        "status": "done",
+        "desc": "Registered voters may cast ballots before Election Day at designated locations."
+      },
+      {
+        "title": "Election Day",
+        "date": "Nov 5, 2024",
+        "status": "current",
+        "desc": "The main voting day when eligible voters cast their ballots in person or by mail."
+      },
+      {
+        "title": "Vote counting and certification",
+        "date": "Nov 6 - Dec 2024",
+        "status": "upcoming",
+        "desc": "Election officials tally ballots and certify the final results."
+      },
+      {
+        "title": "Electoral College meets",
+        "date": "Dec 17, 2024",
+        "status": "upcoming",
+        "desc": "Electors cast their formal votes for president and vice president."
+      },
+      {
+        "title": "Congress certifies results",
+        "date": "Jan 6, 2025",
+        "status": "upcoming",
+        "desc": "Congress counts and certifies the Electoral College vote."
+      }
+    ],
+    "primary": [
+      {
+        "title": "Party filing deadline",
+        "date": "Jan 10, 2024",
+        "status": "done",
+        "desc": "Candidates file to appear on the primary ballot and begin formal campaigning."
+      },
+      {
+        "title": "Campaign season",
+        "date": "Jan - Mar 2024",
+        "status": "done",
+        "desc": "Candidates travel, debate, and raise support in early voting states."
+      },
+      {
+        "title": "Super Tuesday",
+        "date": "Mar 5, 2024",
+        "status": "done",
+        "desc": "A large group of states vote on the same day and reshape the race."
+      },
+      {
+        "title": "Remaining state primaries",
+        "date": "Mar - Jun 2024",
+        "status": "current",
+        "desc": "The rest of the states and territories choose delegates and nominees."
+      },
+      {
+        "title": "Party convention",
+        "date": "Jul - Aug 2024",
+        "status": "upcoming",
+        "desc": "Delegates formally nominate the party ticket and adopt a platform."
+      },
+      {
+        "title": "General election campaign",
+        "date": "Aug - Nov 2024",
+        "status": "upcoming",
+        "desc": "Nominated candidates campaign nationally before the general election."
+      }
+    ],
+    "local": [
+      {
+        "title": "Candidate filing period",
+        "date": "Jul 1 - 15, 2024",
+        "status": "done",
+        "desc": "Local candidates file paperwork for offices like city council and school board."
+      },
+      {
+        "title": "Nonpartisan primary",
+        "date": "Aug 6, 2024",
+        "status": "done",
+        "desc": "Many local races use an initial round to narrow the field."
+      },
+      {
+        "title": "Campaign and outreach",
+        "date": "Aug - Oct 2024",
+        "status": "done",
+        "desc": "Candidates connect with voters through events, canvassing, and public forums."
+      },
+      {
+        "title": "Local Election Day",
+        "date": "Nov 5, 2024",
+        "status": "current",
+        "desc": "Voters choose local leaders and decide issues that affect their communities."
+      },
+      {
+        "title": "Results and runoff",
+        "date": "Nov - Dec 2024",
+        "status": "upcoming",
+        "desc": "If required, a runoff election decides the winner between the top candidates."
+      }
+    ]
+  },
+  "steps": [
+    {
+      "num": "01",
+      "name": "Candidate Announces",
+      "short": "Candidate announces",
+      "detail": "A prospective candidate declares their intention to run and starts building a campaign.",
+      "checklist": [
+        "File a statement of candidacy",
+        "Open a campaign bank account",
+        "Register with the FEC for federal races",
+        "Share the announcement publicly"
+      ]
+    },
+    {
+      "num": "02",
+      "name": "Fundraising Begins",
+      "short": "Fundraising begins",
+      "detail": "Campaigns raise money through donations, events, and online giving tools.",
+      "checklist": [
+        "Set fundraising goals",
+        "Launch a donation page",
+        "Track contribution limits",
+        "File financial disclosures"
+      ]
+    },
+    {
+      "num": "03",
+      "name": "Primary Election",
+      "short": "Primary election",
+      "detail": "Voters choose the nominee who will represent a party in the general election.",
+      "checklist": [
+        "Check whether the primary is open or closed",
+        "Verify voter registration",
+        "Find your polling place",
+        "Vote for your preferred candidate"
+      ]
+    },
+    {
+      "num": "04",
+      "name": "Party Convention",
+      "short": "Party convention",
+      "detail": "Delegates formally nominate the party ticket and announce the platform.",
+      "checklist": [
+        "Delegates cast nominating votes",
+        "The platform is adopted",
+        "The vice presidential nominee is announced",
+        "The nominee gives an acceptance speech"
+      ]
+    },
+    {
+      "num": "05",
+      "name": "General Campaign",
+      "short": "General campaign",
+      "detail": "The nominees campaign nationally and try to persuade undecided voters.",
+      "checklist": [
+        "Watch debates and interviews",
+        "Compare issue positions",
+        "Volunteer with a civic group",
+        "Help other eligible voters register"
+      ]
+    },
+    {
+      "num": "06",
+      "name": "Election Day Voting",
+      "short": "Election Day voting",
+      "detail": "Eligible voters cast ballots for the offices and issues that appear on the ballot.",
+      "checklist": [
+        "Confirm your polling place and hours",
+        "Bring required identification",
+        "Review a sample ballot early",
+        "Leave extra time for lines"
+      ]
+    },
+    {
+      "num": "07",
+      "name": "Vote Counting",
+      "short": "Vote counting",
+      "detail": "Election officials count ballots, review provisional ballots, and report results.",
+      "checklist": [
+        "Watch precinct results come in",
+        "Allow time for mail ballots",
+        "Review provisional ballots",
+        "Wait for certification"
+      ]
+    },
+    {
+      "num": "08",
+      "name": "Certification and Inauguration",
+      "short": "Certification and inauguration",
+      "detail": "Results are certified and the winning candidates prepare to take office.",
+      "checklist": [
+        "States certify results",
+        "Congress counts Electoral College votes",
+        "The transition team prepares",
+        "The new term begins with inauguration"
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "q": "What is the minimum age to vote in a US federal election?",
+      "opts": [
+        "16 years old",
+        "18 years old",
+        "21 years old",
+        "25 years old"
+      ],
+      "correct": 1,
+      "explain": "The 26th Amendment set the federal voting age at 18."
+    },
+    {
+      "q": "What is the Electoral College?",
+      "opts": [
+        "A university that trains politicians",
+        "A group of electors who formally elect the President",
+        "The US Senate and House combined",
+        "A committee that writes election laws"
+      ],
+      "correct": 1,
+      "explain": "The Electoral College is the system used to formally elect the President."
+    },
+    {
+      "q": "What happens in a primary election?",
+      "opts": [
+        "Citizens vote for the President directly",
+        "The Supreme Court selects nominees",
+        "Party members choose their nominee",
+        "Congress approves candidate lists"
+      ],
+      "correct": 2,
+      "explain": "A primary helps a party choose the nominee who will run in the general election."
+    },
+    {
+      "q": "What is voter suppression?",
+      "opts": [
+        "Encouraging voters to stay home on rainy days",
+        "Efforts to prevent eligible citizens from voting",
+        "Counting ballots after Election Day",
+        "Running negative political advertisements"
+      ],
+      "correct": 1,
+      "explain": "Voter suppression means making it harder for eligible people to vote."
+    },
+    {
+      "q": "How often are US House of Representatives members elected?",
+      "opts": ["Every year", "Every 2 years", "Every 4 years", "Every 6 years"],
+      "correct": 1,
+      "explain": "House members are elected every two years."
+    },
+    {
+      "q": "What is a runoff election?",
+      "opts": [
+        "An election held during a storm",
+        "A vote to remove an official from office",
+        "A tiebreaker between the top two candidates",
+        "An early voting period before Election Day"
+      ],
+      "correct": 2,
+      "explain": "A runoff is a follow-up election when no candidate gets the needed threshold."
+    }
+  ],
+  "calendarEvents": [
+    {
+      "name": "Voter Registration Deadline",
+      "date": "2024-10-07",
+      "type": "deadline",
+      "desc": "Last day to register in most states before the November election."
+    },
+    {
+      "name": "Early Voting Begins",
+      "date": "2024-10-20",
+      "type": "event",
+      "desc": "Early in-person voting opens at designated locations."
+    },
+    {
+      "name": "Presidential Election Day",
+      "date": "2024-11-05",
+      "type": "event",
+      "desc": "General Election Day for federal, state, and local offices."
+    },
+    {
+      "name": "Electoral College Meets",
+      "date": "2024-12-17",
+      "type": "event",
+      "desc": "Electors cast their formal Electoral College votes."
+    },
+    {
+      "name": "Congress Certifies Results",
+      "date": "2025-01-06",
+      "type": "result",
+      "desc": "Congress counts and certifies the Electoral College vote."
+    },
+    {
+      "name": "Presidential Inauguration",
+      "date": "2025-01-20",
+      "type": "result",
+      "desc": "The newly elected President is sworn into office."
+    }
+  ]
+}

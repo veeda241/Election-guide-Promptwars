@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.local
+.venv/
+.flask_session/
+backend/.flask_session/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+npm-debug.log*
+dist/
+build/
