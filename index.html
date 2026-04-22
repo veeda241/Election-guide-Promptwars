@@ -157,7 +157,7 @@
       transition: max-height 0.3s ease;
       padding: 0 1rem;
     }
-    .tl-item.open .tl-body { max-height: 400px; }
+    .tl-item.open .tl-body { max-height: 600px; }
     .tl-body-inner {
       padding: 0.75rem 0 1rem;
       border-top: 1px solid var(--color-border);
@@ -610,7 +610,6 @@ function renderTimeline() {
 
   el.innerHTML = list.map((item, i) => {
     const sc = statusClass(item.status);
-    const calDate = currentElection === 'general' && i < 7 ? CAL_EVENTS.filter(e => e.name.toLowerCase().includes('election day') || i === 3)[0] : null;
     return `
     <div class="tl-item" data-idx="${i}" role="listitem" tabindex="0"
          aria-expanded="false" style="outline:none;">
