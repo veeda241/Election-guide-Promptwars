@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Election Guide - Dashboard</title>
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────────────── */
+    :root {
+      --color-bg: #ffffff;
+      --color-surface: #f8fafc;
+      --color-surface-alt: #f1f5f9;
+      --color-border: #e2e8f0;
+      --color-text-primary: #0f172a;
+      --color-text-secondary: #475569;
+      --color-text-muted: #94a3b8;
+
+      /* Ramps */
+      --blue-50: #eff6ff;
+      --blue-100: #dbeafe;
+      --blue-600: #2563eb;
+      --blue-700: #1d4ed8;
+      --teal-50: #f0fdfa;
+      --teal-100: #ccfbf1;
+      --teal-600: #0d9488;
+      --teal-700: #0f766e;
+      --amber-50: #fffbeb;
+      --amber-100: #fef3c7;
+      --amber-600: #d97706;
+      --amber-800: #92400e;
+      --green-50: #f0fdf4;
+      --green-100: #dcfce7;
+      --green-600: #16a34a;
+      --green-800: #166534;
+      --coral-50: #fff1f2;
+      --coral-100: #ffe4e6;
+      --coral-600: #e11d48;
+      --coral-800: #9f1239;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-500: #64748b;
+    }
+
+    /* ─── Reset ─────────────────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    button {
+      cursor: pointer;
+      font: inherit;
+    }
+    a {
+      color: var(--blue-600);
+    }
+
+    /* ─── Screen-reader only ─────────────────────────────────────── */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ─── App Shell ──────────────────────────────────────────────── */
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      gap: 1rem;
+    }
+
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .user-avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--blue-600);
+    }
+
+    .user-details {
+      text-align: right;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .user-email {
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+    }
+
+    .btn-logout {
+      padding: 0.375rem 0.75rem;
+      background: var(--coral-600);
+      color: white;
+      border: none;
+      border-radius: 0.375rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-logout:hover {
+      background: var(--coral-800);
+    }
+
+    .app-content {
+      flex: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+      width: 100%;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .app-header .icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      background: var(--blue-600);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+    .app-header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .app-header p {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+    }
+
+    /* ─── Tab Bar ────────────────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      gap: 0.25rem;
+      border-bottom: 2px solid var(--color-border);
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 0.625rem 1rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab[aria-selected="true"] {
+      color: var(--blue-600);
+      border-bottom-color: var(--blue-600);
+    }
+    .tab:hover {
+      color: var(--color-text-primary);
+    }
+
+    /* ─── Panels ─────────────────────────────────────────────────── */
+    .panel {
+      display: none;
+    }
+    .panel.active {
+      display: block;
+    }
+
+    /* ─── Buttons ────────────────────────────────────────────────── */
+    .btn-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.375rem;
+      border: none;
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+    .btn-primary {
+      background: var(--blue-600);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--blue-700);
+    }
+    .btn-gcal {
+      background: #4285f4;
+      color: #fff;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.5rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+    }
+    .btn-gcal:hover {
+      background: #3367d6;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--blue-600);
+      border: 1px solid var(--blue-600);
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.375rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+    .btn-outline:hover {
+      background: var(--blue-50);
+    }
+
+    /* ─── Badges ─────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-done {
+      background: var(--green-100);
+      color: var(--green-800);
+    }
+    .badge-current {
+      background: var(--amber-100);
+      color: var(--amber-800);
+    }
+    .badge-upcoming {
+      background: var(--blue-100);
+      color: var(--blue-700);
+    }
+
+    /* ─── Election Type Selector ─────────────────────────────────── */
+    .election-selector {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .election-btn {
+      padding: 0.375rem 1rem;
+      border-radius: 9999px;
+      border: 1.5px solid var(--color-border);
+      background: var(--color-bg);
+      color: var(--color-text-secondary);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .election-btn.active {
+      background: var(--blue-600);
+      color: #fff;
+      border-color: var(--blue-600);
+    }
+    .election-btn:hover:not(.active) {
+      border-color: var(--blue-600);
+      color: var(--blue-600);
+    }
+
+    /* ─── Timeline ───────────────────────────────────────────────── */
+    .tl-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+    .tl-item {
+      border: 1px solid var(--color-border);
+      border-radius: 0.625rem;
+      overflow: hidden;
+      background: var(--color-bg);
+    }
+    .tl-head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      text-align: left;
+      width: 100%;
+    }
+    .tl-head:hover {
+      background: var(--color-surface);
+    }
+    .tl-dot {
+      width: 0.875rem;
+      height: 0.875rem;
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .tl-dot.done {
+      background: var(--green-600);
+    }
+    .tl-dot.current {
+      background: var(--amber-600);
+    }
+    .tl-dot.upcoming {
+      background: var(--blue-600);
+    }
+    .tl-meta {
+      flex: 1;
+      min-width: 0;
+    }
+    .tl-title {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      display: block;
+    }
+    .tl-date {
+      font-size: 0.8125rem;
+      color: var(--color-text-secondary);
+    }
+    .tl-chevron {
+      color: var(--color-text-muted);
+      transition: transform 0.25s;
+      font-size: 1rem;
+    }
+    .tl-item.open .tl-chevron {
+      transform: rotate(180deg);
+    }
+    .tl-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 1rem;
+    }
+    .tl-item.open .tl-body {
+      max-height: 600px;
+    }
+    .tl-body-inner {
+      padding: 0.75rem 0 1rem;
+      border-top: 1px solid var(--color-border);
+    }
+    .tl-desc {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.75rem;
+    }
+    .tl-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Steps ──────────────────────────────────────────────────── */
+    .step-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .step-card {
+      border: 1.5px solid var(--color-border);
+      border-radius: 0.625rem;
+      padding: 1rem;
+      cursor: pointer;
+      background: var(--color-bg);
+      text-align: left;
+      transition: all 0.15s;
+    }
+    .step-card:hover {
+      border-color: var(--blue-600);
+      background: var(--blue-50);
+    }
+    .step-card.selected {
+      border-color: var(--blue-600);
+      background: var(--blue-50);
+      box-shadow: 0 0 0 2px var(--blue-100);
+    }
+    .step-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--blue-600);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    .step-short {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .step-detail {
+      border: 1px solid var(--color-border);
+      border-radius: 0.625rem;
+      padding: 1.25rem;
+      background: var(--color-surface);
+    }
+    .step-detail-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 0.625rem;
+    }
+    .step-detail-desc {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+    }
+    .step-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      margin-bottom: 1rem;
+    }
+    .step-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+    .step-checklist li::before {
+      content: "✓";
+      color: var(--green-600);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    /* ─── Quiz ───────────────────────────────────────────────────── */
+    .quiz-progress-bar {
+      height: 0.375rem;
+      background: var(--gray-200);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: var(--blue-600);
+      transition: width 0.3s ease;
+      border-radius: 9999px;
+    }
+    .quiz-pips {
+      display: flex;
+      gap: 0.375rem;
+      margin-bottom: 1.25rem;
+    }
+    .quiz-pip {
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      background: var(--gray-100);
+      color: var(--color-text-muted);
+      border: 1.5px solid var(--gray-200);
+    }
+    .quiz-pip.done {
+      background: var(--green-100);
+      color: var(--green-800);
+      border-color: var(--green-600);
+    }
+    .quiz-pip.current {
+      background: var(--blue-100);
+      color: var(--blue-700);
+      border-color: var(--blue-600);
+    }
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .quiz-score {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--blue-600);
+    }
+    .quiz-card {
+      border: 1px solid var(--color-border);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      background: var(--color-bg);
+    }
+    .quiz-q {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .quiz-opt {
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: 0.5rem;
+      background: var(--color-bg);
+      text-align: left;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quiz-opt:hover:not(:disabled) {
+      border-color: var(--blue-600);
+      background: var(--blue-50);
+    }
+    .quiz-opt.correct {
+      background: var(--green-50);
+      border-color: var(--green-600);
+      color: var(--green-800);
+    }
+    .quiz-opt.wrong {
+      background: var(--coral-50);
+      border-color: var(--coral-600);
+      color: var(--coral-800);
+    }
+    .quiz-opt:disabled {
+      cursor: not-allowed;
+    }
+    .quiz-feedback {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+      min-height: 1.25rem;
+    }
+    .quiz-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .quiz-results {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .quiz-results-score {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--blue-600);
+    }
+    .quiz-results-label {
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    .quiz-results-msg {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    .quiz-results-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Calendar ───────────────────────────────────────────────── */
+    .gcal-intro {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+    }
+    .event-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .event-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: 0.625rem;
+      cursor: pointer;
+      background: var(--color-bg);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .event-row.checked {
+      border-color: var(--blue-600);
+      background: var(--blue-50);
+    }
+    .event-checkbox {
+      width: 1.125rem;
+      height: 1.125rem;
+      border-radius: 0.25rem;
+      border: 2px solid var(--gray-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      background: var(--color-bg);
+    }
+    .event-row.checked .event-checkbox {
+      background: var(--blue-600);
+      border-color: var(--blue-600);
+    }
+    .event-checkbox::after {
+      content: "✓";
+      color: #fff;
+      font-size: 0.75rem;
+      display: none;
+    }
+    .event-row.checked .event-checkbox::after {
+      display: block;
+    }
+    .event-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .event-name {
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+    .event-date {
+      font-size: 0.8125rem;
+      color: var(--color-text-secondary);
+    }
+    .type-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .type-deadline {
+      background: var(--coral-100);
+      color: var(--coral-800);
+    }
+    .type-event {
+      background: var(--blue-100);
+      color: var(--blue-700);
+    }
+    .type-result {
+      background: var(--green-100);
+      color: var(--green-800);
+    }
+    .gcal-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .gcal-status {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .gcal-status.success {
+      color: var(--green-600);
+    }
+    .gcal-status.error {
+      color: var(--coral-600);
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .spinner {
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid var(--blue-200);
+      border-top: 2px solid var(--blue-600);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .app-navbar {
+        flex-wrap: wrap;
+      }
+
+      .user-info {
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .step-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+      .quiz-pips {
+        flex-wrap: wrap;
+      }
+      .app-header h1 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- Navbar -->
+    <nav class="app-navbar">
+      <div class="app-logo">🗳️ Election Guide</div>
+      <div class="user-menu" id="user-menu"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="app-content">
+      <!-- Screen-reader summary -->
+      <h2 class="sr-only">
+        Election Process Guide — Interactive assistant for understanding
+        election steps, timelines, and civic participation
+      </h2>
+
+      <!-- Header -->
+      <div class="app-header">
+        <div class="icon" aria-hidden="true">🗳</div>
+        <div>
+          <h1>Election Guide</h1>
+          <p>Interactive civic education assistant</p>
+        </div>
+      </div>
+
+      <!-- Tab Bar -->
+      <nav role="tablist" aria-label="Election guide sections" class="tab-bar">
+        <button
+          class="tab"
+          role="tab"
+          aria-selected="true"
+          data-panel="timeline"
+          id="tab-timeline"
+        >
+          📅 Timeline
+        </button>
+        <button
+          class="tab"
+          role="tab"
+          aria-selected="false"
+          data-panel="steps"
+          id="tab-steps"
+        >
+          🔄 How It Works
+        </button>
+        <button
+          class="tab"
+          role="tab"
+          aria-selected="false"
+          data-panel="quiz"
+          id="tab-quiz"
+        >
+          🧠 Test Yourself
+        </button>
+        <button
+          class="tab"
+          role="tab"
+          aria-selected="false"
+          data-panel="calendar"
+          id="tab-calendar"
+        >
+          📆 Add to Calendar
+        </button>
+      </nav>
+
+      <!-- ═══════════════ TIMELINE PANEL ═══════════════ -->
+      <section
+        id="panel-timeline"
+        class="panel active"
+        role="tabpanel"
+        aria-label="Election timeline"
+        aria-labelledby="tab-timeline"
+      >
+        <div class="election-selector" role="group" aria-label="Select election type">
+          <button class="election-btn active" data-election="general">
+            General Election
+          </button>
+          <button class="election-btn" data-election="primary">
+            Primary Election
+          </button>
+          <button class="election-btn" data-election="local">
+            Local Election
+          </button>
+        </div>
+
+        <div id="timeline-list" aria-live="polite" class="tl-list"></div>
+      </section>
+
+      <!-- ═══════════════ STEPS PANEL ═══════════════ -->
+      <section
+        id="panel-steps"
+        class="panel"
+        role="tabpanel"
+        aria-label="How the election process works"
+        aria-labelledby="tab-steps"
+      >
+        <div id="steps-grid" class="step-grid" role="list"></div>
+        <div id="step-detail" class="step-detail"></div>
+      </section>
+
+      <!-- ═══════════════ QUIZ PANEL ═══════════════ -->
+      <section
+        id="panel-quiz"
+        class="panel"
+        role="tabpanel"
+        aria-label="Civic knowledge quiz"
+        aria-labelledby="tab-quiz"
+      >
+        <div id="quiz-root"></div>
+      </section>
+
+      <!-- ═══════════════ CALENDAR PANEL ═══════════════ -->
+      <section
+        id="panel-calendar"
+        class="panel"
+        role="tabpanel"
+        aria-label="Add election dates to Google Calendar"
+        aria-labelledby="tab-calendar"
+      >
+        <p class="gcal-intro">
+          Select the election events you want to track and add them to your
+          Google Calendar in one click.
+        </p>
+        <div id="event-list" class="event-list" role="list"></div>
+        <div class="gcal-actions">
+          <button
+            class="btn-gcal"
+            id="btn-add-gcal"
+            aria-label="Add selected events to Google Calendar"
+          >
+            📅 Add to Google Calendar
+          </button>
+          <span
+            id="gcal-status"
+            class="gcal-status"
+            aria-live="polite"
+            role="status"
+          ></span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════════════
+       DATA CONSTANTS
+    ═══════════════════════════════════════════════════════════════ */
+
+    const TIMELINES = {
+      general: [
+        {
+          title: "Candidate filing deadline",
+          date: "Aug 15, 2024",
+          status: "done",
+          desc: "Candidates officially declare their intention to run and submit required paperwork to election authorities. This deadline ensures the ballot is finalized well in advance of Election Day.",
+        },
+        {
+          title: "Voter registration opens",
+          date: "Sep 1, 2024",
+          status: "done",
+          desc: "Eligible citizens may register to vote or update their existing registration. Many states allow online registration, making the process more accessible.",
+        },
+        {
+          title: "Early voting begins",
+          date: "Oct 20, 2024",
+          status: "done",
+          desc: "Registered voters can cast their ballots before Election Day at designated polling locations. Early voting reduces long lines and increases participation rates.",
+        },
+        {
+          title: "Election Day",
+          date: "Nov 5, 2024",
+          status: "current",
+          desc: "The main day of the election. Polls are open across the country and eligible registered voters cast their ballots in person. Results begin to be reported after polls close.",
+        },
+        {
+          title: "Vote counting & certification",
+          date: "Nov 6 – Dec 2024",
+          status: "upcoming",
+          desc: "Election officials tally all ballots including mail-in and provisional votes. Each state certifies its results, confirming the official vote totals.",
+        },
+        {
+          title: "Electoral College meets",
+          date: "Dec 17, 2024",
+          status: "upcoming",
+          desc: "Presidential electors from each state gather at their respective state capitals to cast their formal votes for President and Vice President based on the popular vote outcome in their state.",
+        },
+        {
+          title: "Congress certifies results",
+          date: "Jan 6, 2025",
+          status: "upcoming",
+          desc: "A joint session of Congress convenes to count and certify the Electoral College votes, officially confirming the winner of the Presidential election.",
+        },
+      ],
+      primary: [
+        {
+          title: "Party filing deadline",
+          date: "Jan 10, 2024",
+          status: "done",
+          desc: "Candidates must file with their political party and election authorities to appear on primary ballots. Parties may also hold caucuses or conventions to select delegates.",
+        },
+        {
+          title: "Campaign season",
+          date: "Jan – Mar 2024",
+          status: "done",
+          desc: "Candidates campaign across early primary states, participate in debates, and seek endorsements. Polling and fundraising shape the competitive landscape.",
+        },
+        {
+          title: "Super Tuesday",
+          date: "Mar 5, 2024",
+          status: "done",
+          desc: "The largest single primary election day, with over a dozen states voting simultaneously. Results often effectively determine the front-runner for each party's nomination.",
+        },
+        {
+          title: "Remaining state primaries",
+          date: "Mar – Jun 2024",
+          status: "current",
+          desc: "The remaining states and territories hold their primary elections, awarding delegates to candidates. A candidate clinches the nomination by securing a majority of delegates.",
+        },
+        {
+          title: "Party convention",
+          date: "Jul – Aug 2024",
+          status: "upcoming",
+          desc: "Each major party holds its national convention where delegates formally nominate the presidential and vice-presidential candidates and adopt the party platform.",
+        },
+        {
+          title: "General election campaign",
+          date: "Aug – Nov 2024",
+          status: "upcoming",
+          desc: "Nominated candidates campaign nationally, participate in presidential debates, and make their final appeal to voters before Election Day in November.",
+        },
+      ],
+      local: [
+        {
+          title: "Candidate filing period",
+          date: "Jul 1 – 15, 2024",
+          status: "done",
+          desc: "Local candidates — for offices like city council, school board, and mayor — file their candidacy papers with the local election authority within a designated window.",
+        },
+        {
+          title: "Nonpartisan primary",
+          date: "Aug 6, 2024",
+          status: "done",
+          desc: "Many local elections are nonpartisan. A preliminary election narrows the field, with the top vote-getters advancing to the general election regardless of party affiliation.",
+        },
+        {
+          title: "Campaign and outreach",
+          date: "Aug – Oct 2024",
+          status: "done",
+          desc: "Local candidates canvass neighborhoods, hold town halls, and engage community organizations. Voter outreach focuses on local issues like zoning, schools, and public safety.",
+        },
+        {
+          title: "Local Election Day",
+          date: "Nov 5, 2024",
+          status: "current",
+          desc: "Voters go to the polls to elect local officeholders. Turnout in local elections is often lower than in national contests, making each vote especially impactful.",
+        },
+        {
+          title: "Results & runoff (if needed)",
+          date: "Nov – Dec 2024",
+          status: "upcoming",
+          desc: "If no candidate wins an outright majority, a runoff election may be held between the top two candidates to determine a clear winner.",
+        },
+      ],
+    };
+
+    const STEPS = [
+      {
+        num: "01",
+        name: "Candidate Announces",
+        short: "Candidate announces",
+        detail:
+          "A potential candidate publicly declares their intention to run for office. This often involves forming an exploratory committee, filing campaign finance reports, and building an initial team of advisers and volunteers.",
+        checklist: [
+          "File a Statement of Candidacy",
+          "Open a campaign bank account",
+          "Register with the FEC (federal races)",
+          "Announce publicly via press conference or social media",
+        ],
+      },
+      {
+        num: "02",
+        name: "Fundraising Begins",
+        short: "Fundraising begins",
+        detail:
+          "Campaigns raise money through individual donations, PACs, and events. Campaign finance laws regulate contribution limits and reporting requirements. Fundraising strength signals viability to voters and the media.",
+        checklist: [
+          "Set fundraising goals and milestones",
+          "Launch online donation platform",
+          "Comply with contribution limits",
+          "File periodic financial disclosures",
+        ],
+      },
+      {
+        num: "03",
+        name: "Primary Election",
+        short: "Primary election",
+        detail:
+          "A primary is an intra-party election to select the party's nominee for the general election. Some states hold closed primaries (party members only) while others allow all registered voters to participate in open primaries.",
+        checklist: [
+          "Check your state's primary type (open/closed)",
+          "Verify voter registration",
+          "Locate your polling place",
+          "Cast your ballot for your preferred candidate",
+        ],
+      },
+      {
+        num: "04",
+        name: "Party Convention",
+        short: "Party convention",
+        detail:
+          "National party conventions formally nominate the presidential ticket and adopt the party platform. Delegates selected during the primary process cast nominating votes. Conventions are also key media and messaging events.",
+        checklist: [
+          "Delegates cast nominating votes",
+          "Party platform is adopted",
+          "Vice presidential nominee is announced",
+          "Nominee delivers acceptance speech",
+        ],
+      },
+      {
+        num: "05",
+        name: "General Campaign",
+        short: "General campaign",
+        detail:
+          "The nominated candidates from each party campaign across the country, targeting swing states and voter demographics. Presidential debates, advertising, and ground-level canvassing are all critical components.",
+        checklist: [
+          "Participate in or watch presidential debates",
+          "Evaluate candidate positions on key issues",
+          "Volunteer with a campaign or civic organization",
+          "Help register other eligible voters",
+        ],
+      },
+      {
+        num: "06",
+        name: "Election Day Voting",
+        short: "Election Day voting",
+        detail:
+          "Eligible registered voters cast their ballots on Election Day. Polls are open for a set number of hours, and voters choose candidates for all races on the ballot — from President down to local offices.",
+        checklist: [
+          "Confirm polling place and hours",
+          "Bring required identification (varies by state)",
+          "Review your sample ballot in advance",
+          "Allow extra time for lines",
+        ],
+      },
+      {
+        num: "07",
+        name: "Vote Counting",
+        short: "Vote counting",
+        detail:
+          "After polls close, election officials count ballots — including in-person, mail-in, early, and provisional votes. The process can take days or weeks. News organizations project winners based on partial returns.",
+        checklist: [
+          "Results are reported in real time by precincts",
+          "Mail-in ballots processed (rules vary by state)",
+          "Provisional ballots reviewed for eligibility",
+          "State officials certify the final count",
+        ],
+      },
+      {
+        num: "08",
+        name: "Certification & Inauguration",
+        short: "Certification & inauguration",
+        detail:
+          "State and federal officials formally certify election results. For the presidency, the Electoral College votes are counted by Congress. The winning candidate is inaugurated and sworn into office.",
+        checklist: [
+          "States certify and submit Electoral College votes",
+          "Congress counts Electoral College votes (Jan 6)",
+          "President-elect prepares transition",
+          "Inauguration ceremony on January 20",
+        ],
+      },
+    ];
+
+    const QUIZ = [
+      {
+        q: "What is the minimum age to vote in a US federal election?",
+        opts: [
+          "16 years old",
+          "18 years old",
+          "21 years old",
+          "25 years old",
+        ],
+        correct: 1,
+        explain:
+          "The 26th Amendment (1971) lowered the federal voting age to 18. Some states allow 17-year-olds to vote in primaries if they will be 18 by the general election.",
+      },
+      {
+        q: "What is the Electoral College?",
+        opts: [
+          "A university that trains politicians",
+          "A group of electors who formally elect the President",
+          "The US Senate and House combined",
+          "A committee that writes election laws",
+        ],
+        correct: 1,
+        explain:
+          "The Electoral College consists of 538 electors. A candidate needs 270 electoral votes to win the presidency. Each state's electors are equal to its total congressional representation.",
+      },
+      {
+        q: "What happens in a primary election?",
+        opts: [
+          "Citizens vote for the President directly",
+          "The Supreme Court selects nominees",
+          "Party members choose their nominee",
+          "Congress approves candidate lists",
+        ],
+        correct: 2,
+        explain:
+          "In a primary election, voters within a party (or sometimes all registered voters) choose the party's nominee who will compete in the general election.",
+      },
+      {
+        q: "What is voter suppression?",
+        opts: [
+          "Encouraging voters to stay home on rainy days",
+          "Efforts to prevent eligible citizens from voting",
+          "Counting ballots after Election Day",
+          "Running negative political advertisements",
+        ],
+        correct: 1,
+        explain:
+          "Voter suppression refers to strategies that discourage or prevent eligible people from exercising their right to vote, such as strict ID laws, polling place closures, or disinformation campaigns.",
+      },
+      {
+        q: "How often are US House of Representatives members elected?",
+        opts: ["Every year", "Every 2 years", "Every 4 years", "Every 6 years"],
+        correct: 1,
+        explain:
+          "All 435 seats in the House of Representatives are up for election every two years. This frequent election cycle keeps representatives closely accountable to their constituents.",
+      },
+      {
+        q: "What is a runoff election?",
+        opts: [
+          "An election held during a storm",
+          "A vote to remove an official from office",
+          "A tiebreaker between the top two candidates",
+          "An early voting period before Election Day",
+        ],
+        correct: 2,
+        explain:
+          "A runoff election occurs when no candidate receives the required threshold of votes (often a majority) in the initial election. The top two vote-getters compete head-to-head in the runoff.",
+      },
+    ];
+
+    const CAL_EVENTS = [
+      {
+        name: "Voter Registration Deadline",
+        date: "2024-10-07",
+        type: "deadline",
+        desc: "Last day to register to vote in most states before the November 5 election. Check your state's specific deadline.",
+      },
+      {
+        name: "Early Voting Begins",
+        date: "2024-10-20",
+        type: "event",
+        desc: "Early in-person voting opens at designated polling locations. Avoid Election Day lines by voting early.",
+      },
+      {
+        name: "Presidential Election Day",
+        date: "2024-11-05",
+        type: "event",
+        desc: "General Election Day. Polls open across the country. Cast your ballot for President, Congress, and local offices.",
+      },
+      {
+        name: "Electoral College Meets",
+        date: "2024-12-17",
+        type: "event",
+        desc: "Presidential electors gather in state capitals to cast formal Electoral College votes.",
+      },
+      {
+        name: "Congress Certifies Results",
+        date: "2025-01-06",
+        type: "result",
+        desc: "A joint session of Congress convenes to count and certify the Electoral College votes.",
+      },
+      {
+        name: "Presidential Inauguration",
+        date: "2025-01-20",
+        type: "result",
+        desc: "The newly elected President is sworn into office at the U.S. Capitol in Washington, D.C.",
+      },
+    ];
+
+    /* ═══════════════════════════════════════════════════════════════
+       STATE
+    ═══════════════════════════════════════════════════════════════ */
+
+    let currentElection = "general";
+    let currentStep = 0;
+    let quizIdx = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+    let checkedEvents = new Set([0, 2, 4]);
+
+    /* ═══════════════════════════════════════════════════════════════
+       HELPERS
+    ═══════════════════════════════════════════════════════════════ */
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function statusClass(s) {
+      return s === "done" ? "done" : s === "current" ? "current" : "upcoming";
+    }
+    function badgeClass(s) {
+      return s === "done"
+        ? "badge-done"
+        : s === "current"
+          ? "badge-current"
+          : "badge-upcoming";
+    }
+    function badgeLabel(s) {
+      return s === "done" ? "Completed" : s === "current" ? "Now" : "Upcoming";
+    }
+
+    async function sendPrompt(prompt) {
+      try {
+        const response = await fetch("/api/ai/prompt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          alert("Claude AI Response:\n\n" + data.response);
+        } else {
+          alert("Error: " + (data.error || "Failed to get AI response"));
+        }
+      } catch (error) {
+        console.error("Error calling Claude API:", error);
+        alert("Failed to contact AI assistant");
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RENDER — TIMELINE
+    ═══════════════════════════════════════════════════════════════ */
+
+    function renderTimeline() {
+      const list = TIMELINES[currentElection];
+      const el = document.getElementById("timeline-list");
+
+      el.innerHTML = list
+        .map((item, i) => {
+          const sc = statusClass(item.status);
+          return `
+      <div class="tl-item" data-idx="${i}" role="listitem" tabindex="0"
+           aria-expanded="false" style="outline:none;">
+        <button class="tl-head" data-idx="${i}" aria-expanded="false">
+          <span class="tl-dot ${sc}" aria-hidden="true"></span>
+          <span class="tl-meta">
+            <span class="tl-title">${escHtml(item.title)}</span>
+            <span class="tl-date">${escHtml(item.date)}</span>
+          </span>
+          <span class="badge ${badgeClass(item.status)}">${badgeLabel(item.status)}</span>
+          <span class="tl-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="tl-body" aria-hidden="true" id="tl-body-${i}">
+          <div class="tl-body-inner">
+            <p class="tl-desc">${escHtml(item.desc)}</p>
+            <div class="tl-actions">
+              <button class="btn-sm btn-primary" data-prompt="${escHtml(item.title)}">Learn more ↗</button>
+              <button class="btn-sm btn-outline" data-cal-title="${escHtml(item.title)}" data-cal-date="${escHtml(item.date)}" data-cal-desc="${escHtml(item.desc)}">📅 Add to Calendar</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+        })
+        .join("");
+
+      /* accordion */
+      el.querySelectorAll(".tl-head").forEach((btn) => {
+        btn.addEventListener("click", toggleTimelineItem);
+      });
+
+      /* keyboard on item wrapper */
+      el.querySelectorAll(".tl-item").forEach((item) => {
+        item.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            item.querySelector(".tl-head").click();
+          }
+        });
+      });
+
+      /* prompt buttons */
+      el.querySelectorAll("[data-prompt]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const phase = btn.getAttribute("data-prompt");
+          sendPrompt(
+            `Tell me more about the "${phase}" phase of the election process.`
+          );
+        });
+      });
+
+      /* calendar buttons */
+      el.querySelectorAll("[data-cal-title]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const title = btn.getAttribute("data-cal-title");
+          const date = btn.getAttribute("data-cal-date");
+          const desc = btn.getAttribute("data-cal-desc");
+          addSingleEventToCalendar(title, date, desc);
+        });
+      });
+    }
+
+    function toggleTimelineItem(e) {
+      const btn = e.currentTarget;
+      const idx = btn.getAttribute("data-idx");
+      const item = btn.closest(".tl-item");
+      const body = document.getElementById("tl-body-" + idx);
+      const open = item.classList.contains("open");
+
+      /* Close all */
+      document.querySelectorAll(".tl-item.open").forEach((el) => {
+        el.classList.remove("open");
+        el.setAttribute("aria-expanded", "false");
+        el.querySelector(".tl-head").setAttribute("aria-expanded", "false");
+        const b = el.querySelector(".tl-body");
+        if (b) b.setAttribute("aria-hidden", "true");
+      });
+
+      if (!open) {
+        item.classList.add("open");
+        item.setAttribute("aria-expanded", "true");
+        btn.setAttribute("aria-expanded", "true");
+        body.setAttribute("aria-hidden", "false");
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RENDER — STEPS
+    ═══════════════════════════════════════════════════════════════ */
+
+    function renderSteps() {
+      const grid = document.getElementById("steps-grid");
+      const detail = document.getElementById("step-detail");
+
+      grid.innerHTML = STEPS.map(
+        (s, i) => `
+    <button class="step-card ${i === currentStep ? "selected" : ""}"
+            role="listitem" tabindex="0"
+            aria-pressed="${i === currentStep}"
+            data-step="${i}">
+      <span class="step-num">${escHtml(s.num)}</span>
+      <span class="step-short">${escHtml(s.short)}</span>
+    </button>
+  `
+      ).join("");
+
+      const s = STEPS[currentStep];
+      detail.innerHTML = `
+    <div class="step-detail-title">${escHtml(s.name)}</div>
+    <p class="step-detail-desc">${escHtml(s.detail)}</p>
+    <ul class="step-checklist">${s.checklist.map((c) => `<li>${escHtml(c)}</li>`).join("")}</ul>
+    <button class="btn-sm btn-primary" id="btn-step-prompt">Explain in detail ↗</button>
+  `;
+
+      grid.querySelectorAll(".step-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          currentStep = parseInt(card.getAttribute("data-step"), 10);
+          renderSteps();
+        });
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            card.click();
+          }
+        });
+      });
+
+      document.getElementById("btn-step-prompt").addEventListener("click", () => {
+        sendPrompt(
+          `Explain in detail: "${s.name}" — what happens during this phase of the election process?`
+        );
+      });
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RENDER — QUIZ
+    ═══════════════════════════════════════════════════════════════ */
+
+    function renderQuiz() {
+      const root = document.getElementById("quiz-root");
+
+      if (quizIdx >= QUIZ.length) {
+        /* Results screen */
+        const pct = Math.round((quizScore / QUIZ.length) * 100);
+        let msg;
+        if (pct === 100)
+          msg = "🎉 Perfect score! You're a civic expert!";
+        else if (pct >= 66)
+          msg = "👍 Great job! You know your civic rights.";
+        else if (pct >= 33)
+          msg = "📚 Good effort! Keep learning about civics.";
+        else
+          msg =
+            "🗳 Don't give up — every voter journey starts somewhere!";
+
+        root.innerHTML = `
+      <div class="quiz-results">
+        <div class="quiz-results-score">${quizScore}/${QUIZ.length}</div>
+        <div class="quiz-results-label">You answered ${quizScore} question${quizScore !== 1 ? "s" : ""} correctly</div>
+        <div class="quiz-results-msg">${escHtml(msg)}</div>
+        <div class="quiz-results-actions">
+          <button class="btn-sm btn-primary" id="btn-more-q">More questions ↗</button>
+          <button class="btn-sm btn-outline" id="btn-restart">Restart Quiz</button>
+        </div>
+      </div>`;
+
+        document
+          .getElementById("btn-more-q")
+          .addEventListener("click", () => {
+            sendPrompt(
+              "Give me more civic education quiz questions about the US election process."
+            );
+          });
+        document.getElementById("btn-restart").addEventListener("click", () => {
+          quizIdx = 0;
+          quizScore = 0;
+          quizAnswered = false;
+          renderQuiz();
+        });
+        return;
+      }
+
+      const q = QUIZ[quizIdx];
+      const pips = QUIZ.map((_, i) => {
+        const cls = i < quizIdx ? "done" : i === quizIdx ? "current" : "";
+        return `<span class="quiz-pip ${cls}" aria-hidden="true">${i + 1}</span>`;
+      }).join("");
+      const pct = Math.round((quizIdx / QUIZ.length) * 100);
+
+      root.innerHTML = `
+    <div>
+      <div class="quiz-progress-bar" aria-label="Quiz progress">
+        <div class="quiz-progress-fill" style="width:${pct}%"></div>
+      </div>
+      <div class="quiz-pips" aria-label="Question progress">${pips}</div>
+      <div class="quiz-header">
+        <span style="font-size:0.875rem;color:var(--color-text-secondary);">Question ${quizIdx + 1} of ${QUIZ.length}</span>
+        <span class="quiz-score" aria-label="Current score: ${quizScore} correct out of ${quizIdx} answered">Score: ${quizScore}/${quizIdx}</span>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <p class="quiz-q" id="quiz-question">${escHtml(q.q)}</p>
+      <div class="quiz-options" role="group" aria-labelledby="quiz-question">
+        ${q.opts
+          .map(
+            (opt, i) => `
+          <button class="quiz-opt" data-idx="${i}" aria-label="Option: ${escHtml(opt)}">${escHtml(opt)}</button>
+        `
+          )
+          .join("")}
+      </div>
+      <div class="quiz-feedback" role="alert" aria-live="assertive" id="quiz-feedback"></div>
+      <div class="quiz-nav">
+        <span></span>
+        <button class="btn-sm btn-primary" id="btn-next" style="display:none;">Next →</button>
+      </div>
+    </div>`;
+
+      root.querySelectorAll(".quiz-opt").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (quizAnswered) return;
+          quizAnswered = true;
+
+          const chosen = parseInt(btn.getAttribute("data-idx"), 10);
+          const correct = q.correct;
+
+          root.querySelectorAll(".quiz-opt").forEach((b) => {
+            b.disabled = true;
+            const idx = parseInt(b.getAttribute("data-idx"), 10);
+            if (idx === correct) b.classList.add("correct");
+            else if (idx === chosen) b.classList.add("wrong");
+          });
+
+          if (chosen === correct) quizScore++;
+
+          const feedback = document.getElementById("quiz-feedback");
+          feedback.textContent =
+            (chosen === correct ? "✅ Correct! " : "❌ Not quite. ") +
+            q.explain;
+
+          const nextBtn = document.getElementById("btn-next");
+          nextBtn.style.display = "inline-flex";
+          nextBtn.addEventListener("click", () => {
+            quizIdx++;
+            quizAnswered = false;
+            renderQuiz();
+          });
+        });
+      });
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RENDER — CALENDAR
+    ═══════════════════════════════════════════════════════════════ */
+
+    function renderCalendar() {
+      const list = document.getElementById("event-list");
+
+      list.innerHTML = CAL_EVENTS.map((ev, i) => {
+        const checked = checkedEvents.has(i);
+        const typeClass = "type-" + ev.type;
+        return `
+    <div class="event-row ${checked ? "checked" : ""}"
+         role="listitem"
+         tabindex="0"
+         data-idx="${i}"
+         aria-label="Select ${escHtml(ev.name)}">
+      <div class="event-checkbox" role="checkbox" aria-checked="${checked}" tabindex="-1"></div>
+      <div class="event-info">
+        <div class="event-name">${escHtml(ev.name)}</div>
+        <div class="event-date">${formatCalDate(ev.date)}</div>
+      </div>
+      <span class="type-badge ${typeClass}">${escHtml(ev.type)}</span>
+    </div>`;
+      }).join("");
+
+      list.querySelectorAll(".event-row").forEach((row) => {
+        const toggle = () => {
+          const idx = parseInt(row.getAttribute("data-idx"), 10);
+          if (checkedEvents.has(idx)) checkedEvents.delete(idx);
+          else checkedEvents.add(idx);
+          renderCalendar();
+        };
+        row.addEventListener("click", toggle);
+        row.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
+    }
+
+    function formatCalDate(dateStr) {
+      const d = new Date(dateStr + "T12:00:00");
+      return d.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    }
+
+    async function addSingleEventToCalendar(title, date, desc) {
+      try {
+        const status = document.getElementById("gcal-status");
+        status.innerHTML =
+          '<span class="loading"><span class="spinner"></span>Adding to calendar...</span>';
+
+        const response = await fetch("/api/calendar/add-event", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, date, description: desc }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          status.textContent = "✅ Event added to Google Calendar!";
+          status.className = "gcal-status success";
+        } else {
+          status.textContent = "Error: " + (data.error || "Failed to add event");
+          status.className = "gcal-status error";
+        }
+
+        setTimeout(() => {
+          status.textContent = "";
+          status.className = "gcal-status";
+        }, 4000);
+      } catch (error) {
+        console.error("Error:", error);
+        const status = document.getElementById("gcal-status");
+        status.textContent = "Failed to add event to calendar";
+        status.className = "gcal-status error";
+      }
+    }
+
+    async function handleAddToCalendar() {
+      const status = document.getElementById("gcal-status");
+
+      if (checkedEvents.size === 0) {
+        status.textContent = "Please select at least one event.";
+        status.className = "gcal-status error";
+        return;
+      }
+
+      status.innerHTML =
+        '<span class="loading"><span class="spinner"></span>Adding events...</span>';
+
+      try {
+        const selected = [...checkedEvents].sort();
+        const events = selected.map((idx) => ({
+          title: CAL_EVENTS[idx].name,
+          date: CAL_EVENTS[idx].date,
+          description: CAL_EVENTS[idx].desc,
+        }));
+
+        const response = await fetch("/api/calendar/add-events", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ events }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          status.textContent = `✅ Added ${data.addedCount} event${data.addedCount !== 1 ? "s" : ""} to Google Calendar!`;
+          status.className = "gcal-status success";
+        } else {
+          status.textContent = "Error: " + (data.error || "Failed to add events");
+          status.className = "gcal-status error";
+        }
+
+        setTimeout(() => {
+          status.textContent = "";
+          status.className = "gcal-status";
+        }, 4000);
+      } catch (error) {
+        console.error("Error:", error);
+        status.textContent = "Failed to add events to calendar";
+        status.className = "gcal-status error";
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TAB SWITCHING
+    ═══════════════════════════════════════════════════════════════ */
+
+    function switchTab(panelId) {
+      document.querySelectorAll(".tab").forEach((t) => {
+        const active = t.getAttribute("data-panel") === panelId;
+        t.setAttribute("aria-selected", String(active));
+      });
+      document.querySelectorAll(".panel").forEach((p) => {
+        p.classList.toggle("active", p.id === "panel-" + panelId);
+      });
+
+      if (panelId === "timeline") renderTimeline();
+      if (panelId === "steps") renderSteps();
+      if (panelId === "quiz") renderQuiz();
+      if (panelId === "calendar") renderCalendar();
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       USER MENU
+    ═══════════════════════════════════════════════════════════════ */
+
+    async function loadUserMenu() {
+      try {
+        const response = await fetch("/api/auth/user");
+        const data = await response.json();
+
+        const userMenu = document.getElementById("user-menu");
+
+        if (data.authenticated && data.user) {
+          userMenu.innerHTML = `
+        <div class="user-info">
+          ${data.user.picture ? `<img src="${escHtml(data.user.picture)}" alt="User avatar" class="user-avatar">` : ""}
+          <div class="user-details">
+            <div class="user-name">${escHtml(data.user.name || "User")}</div>
+            <div class="user-email">${escHtml(data.user.email || "")}</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btn-logout">Logout</button>
+      `;
+
+          document
+            .getElementById("btn-logout")
+            .addEventListener("click", async () => {
+              await fetch("/api/auth/logout", { method: "POST" });
+              window.location.href = "/";
+            });
+        }
+      } catch (error) {
+        console.error("Error loading user menu:", error);
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════════════════════════════ */
+
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () =>
+        switchTab(tab.getAttribute("data-panel"))
+      );
+    });
+
+    document.querySelectorAll(".election-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document
+          .querySelectorAll(".election-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentElection = btn.getAttribute("data-election");
+        renderTimeline();
+      });
+    });
+
+    document
+      .getElementById("btn-add-gcal")
+      .addEventListener("click", handleAddToCalendar);
+
+    /* Initial render */
+    loadUserMenu();
+    renderTimeline();
+    renderCalendar();
+  </script>
+</body>
+</html>
