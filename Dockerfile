@@ -1,24 +1,31 @@
-FROM node:18-alpine
+FROM node:20-alpine AS frontend
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
+RUN npm ci
 
-# Install production dependencies
-RUN npm ci --only=production
+COPY index.html vite.config.js content.json ./
+COPY src ./src
+RUN npm run build
 
-# Copy application files
-COPY server.js .
-COPY public ./public
+FROM python:3.11-slim
 
-# Expose port
-EXPOSE 3000
+WORKDIR /app
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/api/auth/user', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Start server
-CMD ["npm", "start"]
+COPY backend/requirements.txt backend/requirements.txt
+RUN pip install --no-cache-dir -r backend/requirements.txt
+
+COPY backend backend
+COPY content.json ./content.json
+COPY --from=frontend /app/dist ./dist
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/bootstrap').read()"
+
+CMD ["python", "backend/main.py"]

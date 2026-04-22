@@ -5,26 +5,23 @@ services:
     build: .
     container_name: election-guide
     ports:
-      - "3000:3000"
+      - "8000:8000"
     environment:
-      - NODE_ENV=development
-      - PORT=3000
-      - BASE_URL=http://localhost:3000
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - GOOGLE_REDIRECT_URI=${GOOGLE_REDIRECT_URI:-http://localhost:3000/auth/google/callback}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - SESSION_SECRET=${SESSION_SECRET:-dev-secret-change-in-production}
-    volumes:
-      - .:/app
-      - /app/node_modules
+      PORT: 8000
+      HOST: 0.0.0.0
+      SESSION_SECRET: ${SESSION_SECRET:-dev-secret-change-in-production}
+      FLASK_SECRET_KEY: ${FLASK_SECRET_KEY:-dev-flask-secret-change-in-production}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-http://localhost:8000/auth/google/callback}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-3-5-sonnet-latest}
+      BACKEND_URL: ${BACKEND_URL:-http://localhost:8000}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:8000}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/auth/user', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/bootstrap').read()"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 5s
-
-volumes:
-  node_modules:
+      start_period: 10s

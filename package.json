@@ -1,27 +1,22 @@
 {
-  "name": "election-guide",
+  "name": "election-guide-client",
+  "private": true,
   "version": "1.0.0",
-  "description": "Interactive civic education assistant with Google Calendar integration",
-  "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "build": "npm install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently -k -n backend,frontend -c cyan,magenta \".venv\\Scripts\\python.exe -m backend.main\" \"vite\"",
+    "dev": "concurrently -k -n backend,frontend -c cyan,magenta \".venv\\Scripts\\python.exe -m backend.main\" \"vite\"",
+    "backend": ".venv\\Scripts\\python.exe -m backend.main",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0"
   },
-  "keywords": ["election", "civic-education", "google-calendar"],
-  "author": "Your Name",
-  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "google-auth-library": "^9.4.1",
-    "googleapis": "^135.0.0",
-    "anthropic": "^0.28.0",
-    "axios": "^1.6.8",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "cookie-parser": "^1.4.6"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.2.1",
+    "vite": "^5.4.11"
   }
 }
